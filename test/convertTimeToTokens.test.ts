@@ -94,4 +94,5 @@ describe("convertTimeToTokens", () => {
     const expectedOutput = "%a, %d %b %Y %H:%M:%S %Z";
     expect(convertTimeToTokens(input)).toBe(expectedOutput);
   });
+
 });

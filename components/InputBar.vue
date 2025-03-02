@@ -1,75 +1,82 @@
 <template>
-    <div class="centered">
-        <div class="column">
-            <div class="row">
-                <input type="text" v-model="textInput" class="inputItem" />
-            </div>
-            <div class="row">
-                <CodeLanguages :text=textInput class="code-display" />
-            </div>
+    <div class="input-container">
+        <input type="text" v-model="textInput" class="input-field" placeholder="2024-03-14T22:00:00+10:00" />
+        <div class="values-container">
+            <ValueDisplay title="Unix Timestamp" :value="unixTimestamp" />
+            <ValueDisplay title="ISO Format" :value="isoFormat" />
         </div>
+        <CodeExamples :timestamp="unixTimestamp" :isoDate="isoFormat" />
     </div>
 </template>
 
 <script lang="ts">
+import ValueDisplay from './ValueDisplay.vue';
+import CodeExamples from './CodeExamples.vue';
+import { convertDateTimeToUnix, convertUnixToDateTime } from '../utils';
 
-import CodeLanguages from './CodeLanguages.vue';
 export default {
     components: {
-        CodeLanguages
+        ValueDisplay,
+        CodeExamples
     },
     data() {
         return {
             textInput: ''
         };
+    },
+    computed: {
+        unixTimestamp(): string {
+            if (!this.textInput) return '';
+            const timestamp = convertDateTimeToUnix(this.textInput);
+            return isNaN(timestamp) ? '' : String(timestamp);
+        },
+        isoFormat(): string {
+            if (!this.textInput) return '';
+            const timestamp = convertDateTimeToUnix(this.textInput);
+            if (isNaN(timestamp)) return this.textInput;
+            return convertUnixToDateTime(timestamp);
+        }
     }
 };
 </script>
 
-<style>
-.centered {
-    justify-content: center;
-    align-items: center;
-    display: flex;
-    text-align: center;
-    width: 80%;
-}
-
-.inputItem {
-    background-color: #fff;
-    border: 1px solid #8f563b;
-    border-radius: 5px;
-    padding: 10px;
-    font-family: 'Jetbrains Mono', Courier, monospace;
-    font-size: 16px;
-    overflow-x: auto;
+<style scoped>
+.input-container {
     width: 100%;
-    text-align: center;
-}
-
-.code-display {
-    position: relative;
-    background-color: #f5f5f5;
-    border: 1px solid #8f563b;
-    border-radius: 5px;
-    padding: 10px;
-    font-family: 'Jetbrains Mono', Courier, monospace;
-    font-size: 16px;
-    font-weight: 300;
-    overflow-x: auto;
-    width: 100%;
-
-}
-
-.column {
+    max-width: 800px;
     display: flex;
     flex-direction: column;
-    width: 90%;
+    gap: 2rem;
 }
 
-.row {
-    padding: 5%;
-    display: grid;
-    justify-items: center;
+.input-field {
+    padding: 0.75rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 16px;
+    text-align: center;
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    background-color: var(--bg-secondary);
+    color: var(--text-secondary);
+}
+
+.values-container {
+    display: flex;
+    gap: 1rem;
+}
+
+.values-container>* {
+    flex: 1;
+    min-width: 0;
+}
+
+@media (max-width: 768px) {
+    .values-container {
+        flex-direction: column;
+    }
+
+    .values-container>* {
+        width: 100%;
+    }
 }
 </style>

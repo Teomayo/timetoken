@@ -1,0 +1,25 @@
+{
+  "functions": {
+    "source": ".output/server",
+    "runtime": "nodejs18"
+  },
+  "hosting": {
+    "site": "timetoken-57ad5",
+    "public": ".output/public",
+    "cleanUrls": true,
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"]
+  },
+  "emulators": {
+    "functions": {
+      "port": 5001
+    },
+    "hosting": {
+      "port": 5000
+    },
+    "ui": {
+      "enabled": true,
+      "port": 4000
+    },
+    "singleProjectMode": true
+  }
+}
