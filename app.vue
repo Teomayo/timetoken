@@ -52,6 +52,22 @@ import ThemeToggle from './components/ThemeToggle.vue';
   transition: background-color 0.3s;
 }
 
+@media (max-width: 768px) {
+  .app {
+    padding: 1rem;
+  }
+
+  .header {
+    flex-direction: column;
+    text-align: center;
+    margin-bottom: 1.5rem;
+  }
+
+  .title {
+    font-size: 2rem;
+  }
+}
+
 .header {
   display: flex;
   align-items: center;

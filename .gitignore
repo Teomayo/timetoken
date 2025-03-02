@@ -25,3 +25,4 @@ logs
 
 # Firebase
 timetoken-firebase.json
+.firebase

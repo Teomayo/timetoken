@@ -172,4 +172,27 @@ pre[class*="language-"] {
 .button-only .copy-icon {
     color: var(--text-primary);
 }
+
+@media (max-width: 768px) {
+    .copy-button {
+        padding: 2px;
+        min-width: 20px;
+        min-height: 20px;
+    }
+
+    .copy-icon {
+        width: 16px;
+        height: 16px;
+    }
+
+    .button-only {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .button-only .copy-button {
+        padding: 4px;
+    }
+}
 </style>

@@ -8,13 +8,31 @@
             </button>
         </div>
         <div class="code-content">
-            <div class="section">
-                <h4>Time Conversion</h4>
-                <CopyComponent :text="getConversionExample" :language="getLanguageClass" />
+            <div class="section" :class="{ 'mobile-section': isMobile }">
+                <div class="section-header" @click="toggleTimeConversion">
+                    <h4>Time Conversion</h4>
+                    <svg class="arrow-icon" :class="{ 'open': showTimeConversion }" viewBox="0 0 24 24" fill="none"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path d="M7 10l5 5 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                    </svg>
+                </div>
+                <div class="section-content" v-show="!isMobile || showTimeConversion">
+                    <CopyComponent :text="getConversionExample" :language="getLanguageClass" />
+                </div>
             </div>
-            <div class="section">
-                <h4>String Formatting</h4>
-                <CopyComponent :text="getFormattingExample" :language="getLanguageClass" />
+            <div class="section" :class="{ 'mobile-section': isMobile }">
+                <div class="section-header" @click="toggleStringFormatting">
+                    <h4>String Formatting</h4>
+                    <svg class="arrow-icon" :class="{ 'open': showStringFormatting }" viewBox="0 0 24 24" fill="none"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path d="M7 10l5 5 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                    </svg>
+                </div>
+                <div class="section-content" v-show="!isMobile || showStringFormatting">
+                    <CopyComponent :text="getFormattingExample" :language="getLanguageClass" />
+                </div>
             </div>
         </div>
     </div>
@@ -23,11 +41,36 @@
 <script lang="ts">
 import CopyComponent from './CopyComponent.vue';
 import { convertTimeToTokens } from '../utils';
+import { ref } from 'vue';
+import { useMobile } from '../composables/useMobile';
 
 export default {
     props: {
         timestamp: { type: String, required: true },
         isoDate: { type: String, required: true }
+    },
+    setup() {
+        const showTimeConversion = ref(false);
+        const showStringFormatting = ref(false);
+        const { isMobile } = useMobile();
+
+        return {
+            showTimeConversion,
+            showStringFormatting,
+            isMobile,
+            toggleTimeConversion: () => {
+                if (isMobile.value) {
+                    showTimeConversion.value = !showTimeConversion.value;
+                    if (showTimeConversion.value) showStringFormatting.value = false;
+                }
+            },
+            toggleStringFormatting: () => {
+                if (isMobile.value) {
+                    showStringFormatting.value = !showStringFormatting.value;
+                    if (showStringFormatting.value) showTimeConversion.value = false;
+                }
+            }
+        };
     },
     data() {
         return {
@@ -236,6 +279,30 @@ let parsed = DateTime::parse_from_str(
     font-weight: 500;
 }
 
+.section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    user-select: none;
+}
+
+.arrow-icon {
+    width: 24px;
+    height: 24px;
+    color: var(--text-primary);
+    transition: transform 0.3s ease;
+    display: none;
+}
+
+.arrow-icon.open {
+    transform: rotate(180deg);
+}
+
+.section-content {
+    margin-top: 0.75rem;
+}
+
 :deep(.copy-button-small) {
     .code-block {
         margin: 0;
@@ -250,6 +317,49 @@ let parsed = DateTime::parse_from_str(
 
     .copy-icon {
         color: var(--text-primary);
+    }
+}
+
+@media (max-width: 768px) {
+    .language-tabs {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .tab-button {
+        flex: 1;
+        min-width: calc(50% - 0.5rem);
+        text-align: center;
+        font-size: 0.9rem;
+        padding: 0.4rem 0.8rem;
+    }
+
+    .code-examples {
+        padding: 1rem;
+    }
+
+    .section {
+        padding: 0.75rem;
+    }
+
+    .mobile-section {
+        cursor: pointer;
+    }
+
+    .section-header {
+        padding: 0.5rem 0;
+    }
+
+    .arrow-icon {
+        display: block;
+    }
+
+    .section-content {
+        margin-top: 0.75rem;
+    }
+
+    h4 {
+        margin: 0;
     }
 }
 </style>

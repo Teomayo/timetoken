@@ -26,6 +26,8 @@ defineProps<{
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .value-label {
@@ -57,16 +59,45 @@ defineProps<{
     text-overflow: ellipsis;
 }
 
+@media (max-width: 768px) {
+    .value-container {
+        padding: 0.75rem;
+        margin: 0;
+    }
+
+    .value-content {
+        padding: 0.5rem;
+        margin: 0;
+        width: 100%;
+        box-sizing: border-box;
+        gap: 0.25rem;
+    }
+
+    .value-text {
+        font-size: 12px;
+        padding: 0.4rem;
+        flex: 1;
+        min-width: 0;
+    }
+
+    .value-label {
+        font-size: 0.9rem;
+    }
+}
+
 :deep(.copy-button-small) {
     .code-block {
         margin: 0;
         padding: 0;
         background: none;
+        display: flex;
+        align-items: center;
     }
 
     .copy-button {
         position: static;
         opacity: 0.8;
+        padding: 4px;
     }
 
     .copy-icon {
